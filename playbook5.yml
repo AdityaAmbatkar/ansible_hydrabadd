@@ -1,0 +1,30 @@
+---
+- name: instaa apache2
+  hosts: all
+  tasks:
+    - name:
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+      
+      notify: check url response
+    - name: change content
+      copy:
+        content: "welcome to picasa 12k" 
+        dest: /var/www/html/index.html
+      notify: apache2
+  handlers: 
+    - name: apache2
+      service:
+          name: apache2
+          state: restarted
+    - name: check url response
+      uri:
+        url: "{{item}}"
+          
+      with_items: 
+            http://172.31.14.210
+            http://172.31.8.236        
+
+...

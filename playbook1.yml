@@ -1,0 +1,9 @@
+---
+- name: veriables for install/ uninstall packages
+  hosts: all
+  tasks:  
+  - name:
+    apt:  
+      name: "{{a}}"
+      state: "{{b}}"
+      update_cache: "{{c}}"

@@ -1,0 +1,47 @@
+---
+- name: install tomcat9 and tomcat9-admin
+  hosts: all
+  tasks:
+    - name: install begins here
+      apt: 
+        name: "{{item.a}}"
+        state: "{{item.b}}"
+        update_cache: "{{item.c}}"
+      with_items:
+           - {a: tomcat9,b: present,c: yes}
+           - {a: tomcat9-admin,b: present,c: no} 
+
+    - name: copy file to server
+      copy:
+        src: tomcat-users.xml
+        dest: /etc/tomcat9
+
+
+    - name: replace port no
+      replace:
+        regexp: 2020
+        replace: 8080
+        path: /etc/tomcat9/server.xml
+
+
+    - name: restart service
+      service:
+        name: tomcat9
+        state: restarted
+
+    - name: puse fro 30 second
+      pause:
+        seconds: 30
+
+
+    - name: check tomcat server reseponse al server
+      uri:
+        url: "{{item}}"
+        status_code: 200
+      with_items:
+            - http://172.31.14.210:8080
+            - http://172.31.8.236:8080      
+             
+                
+
+...

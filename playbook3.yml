@@ -1,0 +1,24 @@
+---
+- name: loop concept
+  hosts: all
+  tasks:  
+    - name: create user
+      user:
+        name: "{{item.a}}"
+        password: "{{item.b}}"
+        home: "{{item.c}}"
+      with_items: 
+           - {a: piper,b: aditya,c: /tmp/piper}
+           - {a: johney,b: aditya,c: /home/johney}
+
+
+    - name: copy content
+      copy: 
+        src: "{{item.a}}"
+        dest: "{{item.b}}"
+      with_items:
+           - {a: /etc/passwd,b: /tmp/piper}
+           - {a: /etc/passwd,b: /home/johney} 
+        
+
+...
